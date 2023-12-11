@@ -1,35 +1,48 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from 'react';
+import { Header } from './components/Header';
+import { Divider } from './components/Divider';
+import Info from './components/Info';
+import ListGroup from './components/ListGroup';
+
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
+
+  const cities = ['London', 'New York', 'Berlin', 'Paris', 'Madrid'];
+  const conferences = ['JS', 'Typescript', 'React', 'NextJS'];
+
+  const handleSelectItem = (item: string) => console.log(item);
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
+      <Header />
+      <div className='card'>
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
         </button>
-        <p>
+        <Info>
           Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+        </Info>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Info>Click on the Vite and React logos to learn more</Info>
+
+      <Divider />
+      <section>
+        <h2>List Group Component</h2>
+        <ListGroup
+          items={cities}
+          heading='Cities'
+          onSelectItem={handleSelectItem}
+        />
+        <ListGroup
+          items={conferences}
+          heading='Dev Conference'
+          onSelectItem={handleSelectItem}
+        />
+      </section>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
