@@ -1,0 +1,27 @@
+.list-group {
+  list-style-type: none;
+  width: 75%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.list-group-item {
+  border: 1px solid #646cffaa;
+  border-radius: 5px;
+  padding: 5px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.list-group-item:hover {
+  cursor: pointer;
+}
+
+.active {
+  background-color: #ffe24f;
+  border: 1px solid #ffe24f;
+  color: black;
+}

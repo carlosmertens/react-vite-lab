@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { Header } from './components/Header';
-import { Divider } from './components/Divider';
+import { Divider } from './components/Divider/Divider';
 import Info from './components/Info';
-import ListGroup from './components/ListGroup';
+import ListGroup from './components/ListGroup/ListGroup';
+import Like from './components/Like';
 
 import './App.css';
 
@@ -26,6 +27,8 @@ function App() {
         </Info>
       </div>
       <Info>Click on the Vite and React logos to learn more</Info>
+
+      <Like onClick={() => console.log('clicked')} />
 
       <Divider />
       <section>

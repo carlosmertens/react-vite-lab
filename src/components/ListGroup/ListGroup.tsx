@@ -2,6 +2,8 @@
 // import 'bootstrap/dist/css/bootstrap.css';
 
 import { useState } from 'react';
+import { GiCheckMark } from 'react-icons/gi';
+import styles from './ListGroup.module.css';
 
 interface Props {
   items: string[];
@@ -17,15 +19,19 @@ function ListGroup({ items, heading, onSelectItem }: Props) {
       <h3>{heading}</h3>
 
       {items.length === 0 && <p>No item found!</p>}
-      <ul className='list-group'>
+      <ul className={styles['list-group']}>
         {items.map((item, index) => (
           <li
             key={index}
-            className={`list-group-item ${selectedIndex === index && 'active'}`}
+            className={[
+              styles['list-group-item'],
+              styles[`${selectedIndex === index && 'active'}`],
+            ].join(' ')}
             onClick={() => {
               setSelectedIndex(index);
               onSelectItem(item);
             }}>
+            <GiCheckMark color='blue' />
             {item}
           </li>
         ))}
