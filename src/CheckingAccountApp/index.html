@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <link rel="stylesheet" href="style.css" />
+    <title>Checking Account</title>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      class CheckingAccount extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = {
+            balance: 0,
+            inputDeposit: '',
+            inputWithdraw: '',
+          };
+        }
+
+        componentDidMount() {
+          const balance = localStorage.getItem('balance');
+          if (balance) {
+            this.setState({
+              balance: Number(balance),
+            });
+          }
+          window.addEventListener('beforeunload', () => {
+            localStorage.setItem('balance', this.state.balance);
+          });
+        }
+
+        handleDeposit = () => {
+          const deposit = Number(this.state.inputDeposit);
+          if (deposit >= 5) {
+            this.setState((state) => ({
+              balance: state.balance + deposit,
+              inputDeposit: '',
+            }));
+          } else {
+            alert('Minimum deposit is 5 EUR');
+            this.setState({ inputDeposit: '' });
+          }
+        };
+
+        handleWithdraw = () => {
+          const withdraw = Number(this.state.inputWithdraw);
+          if (withdraw >= 5) {
+            this.setState((state) => ({
+              balance: state.balance - withdraw,
+              inputWithdraw: '',
+            }));
+          } else {
+            alert('Minimum Withdraw is 5 EUR');
+            this.setState({ inputWithdraw: '' });
+          }
+        };
+
+        render() {
+          return (
+            <main>
+              <h1>balance: {this.state.balance} EUR</h1>
+
+              <div className='input-group'>
+                <input
+                  id='inputDeposit'
+                  type='number'
+                  min='5'
+                  value={this.state.inputDeposit}
+                  onChange={(e) =>
+                    this.setState({ inputDeposit: e.target.value })
+                  }
+                />
+                <button onClick={this.handleDeposit}>Deposit</button>
+              </div>
+
+              <div className='input-group'>
+                <input
+                  id='inputWithdraw'
+                  type='number'
+                  min='1'
+                  value={this.state.inputWithdraw}
+                  onChange={(e) =>
+                    this.setState({ inputWithdraw: e.target.value })
+                  }
+                />
+                <button onClick={this.handleWithdraw}>Withdraw</button>
+              </div>
+            </main>
+          );
+        }
+      }
+
+      class App extends React.Component {
+        render() {
+          return (
+            <React.Fragment>
+              <CheckingAccount />
+            </React.Fragment>
+          );
+        }
+      }
+
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<App />);
+    </script>
+  </body>
+</html>
