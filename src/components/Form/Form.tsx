@@ -52,6 +52,7 @@ function Form() {
           name=''
           id='name'
           onChange={(e) => setPerson({ ...person, name: e.target.value })}
+          value={person.name}
         />
       </div>
 
@@ -62,6 +63,7 @@ function Form() {
           name=''
           id='age'
           onChange={(e) => setPerson({ ...person, age: e.target.value })}
+          value={person.age}
         />
       </div>
 
