@@ -1,70 +1,58 @@
-import { FormEvent, useRef, useState } from 'react';
+// import { FormEvent } from 'react';
+import { FieldValues, useForm } from 'react-hook-form';
 import styles from './form.module.css';
 
 function Form() {
-  // useState
-  const [person, setPerson] = useState({
-    name: '',
-    age: '',
-  });
+  interface FormData {
+    myText: string;
+    myNumber: number;
+    name: string;
+    age: number;
+  }
 
-  // useRef
-  const myTextRef = useRef<HTMLInputElement>(null);
-  const myNumberRef = useRef<HTMLInputElement>(null);
-  const myData = {
-    myText: '',
-    myNumber: 0,
-  };
+  // console.log(useForm());
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>();
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    // useRef
-    if (myTextRef.current !== null) {
-      myData.myText = myTextRef.current.value;
-    }
-    if (myNumberRef.current !== null) {
-      myData.myNumber = Number(myNumberRef.current.value);
-    }
-    console.log(myData);
-
-    // useState
-    console.log(person);
+  const onSubmit = (data: FieldValues) => {
+    console.log(data);
+    console.log(typeof data.age);
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      {/* useRef */}
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className={styles.fieldGroup}>
         <label htmlFor='myText'>My Text Field:</label>
-        <input type='text' name='' id='myText' ref={myTextRef} />
+        <input
+          type='text'
+          id='myText'
+          {...register('myText', { required: true, minLength: 3 })}
+        />
+        {errors.myText?.type === 'required' && (
+          <p className='errors'>Field required!</p>
+        )}
+
+        {errors.myText?.type === 'minLength' && (
+          <p className='errors'>Length at least 3 char!</p>
+        )}
       </div>
 
       <div className={styles.fieldGroup}>
         <label htmlFor='myNumber'>My Number Field:</label>
-        <input type='number' name='' id='myNumber' ref={myNumberRef} />
+        <input type='number' id='myNumber' {...register('myNumber')} />
       </div>
 
-      {/* useState */}
       <div className={styles.fieldGroup}>
         <label htmlFor='name'>Name:</label>
-        <input
-          type='text'
-          name=''
-          id='name'
-          onChange={(e) => setPerson({ ...person, name: e.target.value })}
-          value={person.name}
-        />
+        <input type='text' id='name' {...register('name')} />
       </div>
 
       <div className={styles.fieldGroup}>
         <label htmlFor='age'>Age:</label>
-        <input
-          type='number'
-          name=''
-          id='age'
-          onChange={(e) => setPerson({ ...person, age: e.target.value })}
-          value={person.age}
-        />
+        <input type='number' id='age' {...register('age')} />
       </div>
 
       <button type='submit'>Submit</button>

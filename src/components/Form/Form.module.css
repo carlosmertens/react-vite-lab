@@ -11,3 +11,7 @@ form {
   align-items: center;
   gap: 10px;
 }
+
+.errors {
+  color: crimson;
+}

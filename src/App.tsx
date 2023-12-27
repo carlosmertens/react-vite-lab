@@ -35,7 +35,7 @@ function App() {
     // remove
     // setTags(tags.filter((tag) => tag !== 'cheerfull'));
   };
-  console.log({ tags });
+  // console.log({ tags });
 
   const cities = ['London', 'New York', 'Berlin', 'Paris', 'Madrid'];
   const conferences = ['JS', 'Typescript', 'React', 'NextJS'];
@@ -44,8 +44,6 @@ function App() {
 
   return (
     <>
-      <Form />
-      <Divider />
       <Header />
       <div className='card'>
         <button onClick={() => setCount((count) => count + 1)}>
@@ -97,6 +95,9 @@ function App() {
           distinctio fugit sint porro consequuntur molestias ut? Quo blanditiis
           est possimus, minima voluptates soluta.
         </ExpandableText>
+
+        <Divider />
+        <Form />
       </section>
     </>
   );
