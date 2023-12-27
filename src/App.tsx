@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Header } from './components/Header';
 import { Divider } from './components/Divider/Divider';
+import Form from './components/Form/Form';
 import ExpandableText from './components/ExpandableText';
 import Info from './components/Info';
 import ListGroup from './components/ListGroup/ListGroup';
@@ -43,6 +44,8 @@ function App() {
 
   return (
     <>
+      <Form />
+      <Divider />
       <Header />
       <div className='card'>
         <button onClick={() => setCount((count) => count + 1)}>
