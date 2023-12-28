@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import './App.css';
+import { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { Divider } from './components/Divider/Divider';
 import Form from './components/Form/Form';
@@ -6,10 +7,13 @@ import ExpandableText from './components/ExpandableText';
 import Info from './components/Info';
 import ListGroup from './components/ListGroup/ListGroup';
 import Like from './components/Like';
-
-import './App.css';
+import ProductLists from './components/ProductList';
+import { CanceledError } from './services/api-client';
+import userService, { User } from './services/user-service';
 
 function App() {
+  const cities = ['London', 'New York', 'Berlin', 'Paris', 'Madrid'];
+  const conferences = ['JS', 'Typescript', 'React', 'NextJS'];
   const [count, setCount] = useState(0);
   const [tags, setTags] = useState(['happy', 'cheerfull']);
   const [customer, setCustomer] = useState({
@@ -19,7 +23,39 @@ function App() {
       zipCode: 0,
     },
   });
+  const [category, setCategory] = useState('');
+  const [users, setUsers] = useState<User[]>([]);
+  const [fetchingError, setFetchingError] = useState('');
+  const [isLoading, setLoading] = useState(false);
 
+  useEffect(() => {
+    // const fetchData = async () => {
+    //   try {
+    //     const response = await axios.get<User[]>(url);
+    //     setUsers(response.data);
+    //   } catch (err) {
+    //     setFetchingError((err as AxiosError).message);
+    //   }
+    // };
+    // fetchData();
+    setLoading(true);
+    const { request, cancel } = userService.getAll<User>();
+    request
+      .then((res) => {
+        setUsers(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        if (err instanceof CanceledError) return;
+        setFetchingError(err.message);
+        setLoading(false);
+      });
+    // .finally(() => setLoading(false));
+
+    return () => cancel();
+  }, []);
+
+  console.log(users);
   const handleUnmutable = () => {
     setCustomer({
       ...customer,
@@ -37,13 +73,29 @@ function App() {
   };
   // console.log({ tags });
 
-  const cities = ['London', 'New York', 'Berlin', 'Paris', 'Madrid'];
-  const conferences = ['JS', 'Typescript', 'React', 'NextJS'];
-
   const handleSelectItem = (item: string) => console.log(item);
 
   return (
     <>
+      <div>
+        {isLoading && <p>Loading Data ...</p>}
+        {fetchingError && <p>{fetchingError}</p>}
+        <ul>
+          {users.map((user) => (
+            <li key={user.id}>{user.name}</li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <select onChange={(e) => setCategory(e.target.value)}>
+          <option value=''></option>
+          <option value='Clothing'>Clothing</option>
+          <option value='HouseHold'>Household</option>
+        </select>
+      </div>
+      <ProductLists category={category} />
+      <Divider />
+
       <Header />
       <div className='card'>
         <button onClick={() => setCount((count) => count + 1)}>
