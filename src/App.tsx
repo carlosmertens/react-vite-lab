@@ -1,5 +1,5 @@
 import './App.css';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Header } from './components/Header';
 import { Divider } from './components/Divider/Divider';
 import Form from './components/Form/Form';
@@ -8,8 +8,7 @@ import Info from './components/Info';
 import ListGroup from './components/ListGroup/ListGroup';
 import Like from './components/Like';
 import ProductLists from './components/ProductList';
-import { CanceledError } from './services/api-client';
-import userService, { User } from './services/user-service';
+import useUsers from './hooks/useUsers';
 
 function App() {
   const cities = ['London', 'New York', 'Berlin', 'Paris', 'Madrid'];
@@ -24,38 +23,8 @@ function App() {
     },
   });
   const [category, setCategory] = useState('');
-  const [users, setUsers] = useState<User[]>([]);
-  const [fetchingError, setFetchingError] = useState('');
-  const [isLoading, setLoading] = useState(false);
+  const { users, fetchingError, isLoading } = useUsers();
 
-  useEffect(() => {
-    // const fetchData = async () => {
-    //   try {
-    //     const response = await axios.get<User[]>(url);
-    //     setUsers(response.data);
-    //   } catch (err) {
-    //     setFetchingError((err as AxiosError).message);
-    //   }
-    // };
-    // fetchData();
-    setLoading(true);
-    const { request, cancel } = userService.getAll<User>();
-    request
-      .then((res) => {
-        setUsers(res.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        if (err instanceof CanceledError) return;
-        setFetchingError(err.message);
-        setLoading(false);
-      });
-    // .finally(() => setLoading(false));
-
-    return () => cancel();
-  }, []);
-
-  console.log(users);
   const handleUnmutable = () => {
     setCustomer({
       ...customer,
